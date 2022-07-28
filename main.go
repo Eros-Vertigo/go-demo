@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "demon/common"
-	_ "demon/module/nethttp"
+	_ "demon/module/context"
 	log "github.com/sirupsen/logrus"
 )
 
