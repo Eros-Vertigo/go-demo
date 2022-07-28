@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "demon/common"
-	_ "demon/module/context"
+	_ "demon/module/socket"
 	log "github.com/sirupsen/logrus"
 )
 
