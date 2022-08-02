@@ -1,9 +1,8 @@
 package socket
 
-// tcp server
-
 import (
 	"bufio"
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io"
 	"net"
@@ -11,55 +10,44 @@ import (
 )
 
 func init() {
-	var tcpAddr *net.TCPAddr
+	setupServer()
+}
 
-	tcpAddr, _ = net.ResolveTCPAddr("tcp", "127.0.0.1:8003")
-
-	tcpListener, _ := net.ListenTCP("tcp", tcpAddr)
-
-	defer tcpListener.Close()
-
-	log.Info("Server ready to read ...")
-
+func setupServer() {
+	ln, err := net.Listen("tcp", ":8004")
+	if err != nil {
+		log.Error(err)
+	}
 	for {
-		tcpConn, err := tcpListener.AcceptTCP()
+		conn, err := ln.Accept()
 		if err != nil {
-			log.Error("accept error :", err)
-			continue
+			log.Error(err)
 		}
-		log.Info("A client connected : ", tcpConn.RemoteAddr().String())
-		go tcpPipe(tcpConn)
+		go handleConnection(conn)
 	}
 }
 
-func tcpPipe(conn *net.TCPConn) {
-	ipStr := conn.RemoteAddr().String()
-
-	defer func() {
-		log.Info(" Disconnected : ", ipStr)
-		conn.Close()
-	}()
-
+func handleConnection(conn net.Conn) {
 	reader := bufio.NewReader(conn)
-	i := 0
-
+	b := []byte(conn.LocalAddr().String() + "Say hello to Server...\n")
+	conn.Write(b)
 	for {
-		message, err := reader.ReadString('\n') // 将数据按照换行符进行读取
+		msg, err := reader.ReadString('\n')
+		fmt.Println("ReadString")
+		fmt.Println(msg)
+
 		if err != nil || err == io.EOF {
+			fmt.Println(err)
 			break
 		}
+		time.Sleep(time.Second * 2)
+		fmt.Println("writing...")
 
-		log.Info(string(message))
+		b := []byte(conn.LocalAddr().String() + "write data to Server...\n")
+		_, err = conn.Write(b)
 
-		time.Sleep(time.Second * 3)
-
-		msg := time.Now().String() + conn.RemoteAddr().String() + "Server Say hello! \n"
-		b := []byte(msg)
-
-		conn.Write(b)
-		i++
-
-		if i > 10 {
+		if err != nil {
+			fmt.Println(err)
 			break
 		}
 	}
