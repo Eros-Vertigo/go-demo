@@ -9,14 +9,17 @@ import (
 )
 
 func init() {
-	//setupClient()
+	fmt.Println("tcpClient")
+	time.Sleep(5 * time.Second)
+	setupClient()
 }
 
 func setupClient() {
-	time.Sleep(5 * time.Second)
-	conn, err := net.Dial("tcp", "127.0.0.1:8004")
+	fmt.Println("setupClient")
+	conn, err := net.Dial("tcp", ":8004")
 	if err != nil {
 		log.Error(err)
+		return
 	}
 	fmt.Fprintf(conn, "GET /HTTP/1.0\r\n\r\n")
 	status, err := bufio.NewReader(conn).ReadString('\n')
