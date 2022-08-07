@@ -22,7 +22,7 @@ func init() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		Rdb = createClient(common.Config.Redis.Host, common.Config.Mongo.Password, common.Config.Redis.Port)
+		Rdb = createClient(common.Config.Redis.Host, common.Config.Redis.Password, common.Config.Redis.Port)
 	}()
 	wg.Wait()
 }
