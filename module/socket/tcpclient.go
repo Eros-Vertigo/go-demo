@@ -5,13 +5,12 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net"
-	"time"
 )
 
 func init() {
-	fmt.Println("tcpClient")
-	time.Sleep(5 * time.Second)
-	setupClient()
+	//fmt.Println("tcpClient")
+	//time.Sleep(5 * time.Second)
+	//setupClient()
 }
 
 func setupClient() {
