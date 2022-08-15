@@ -24,6 +24,7 @@ func setupServer() {
 			log.Error(err)
 		}
 		go handleConnection(conn)
+		//go handleClient(conn)
 	}
 }
 
