@@ -113,9 +113,46 @@ func analyzeTLS(packet gopacket.Packet) {
 		return
 	}
 	temp := l.(*layers.TLS)
-	if len(temp.Handshake) == 0 {
+	if len(temp.Handshake) != 1 {
 		return
 	}
-	fmt.Println(temp.Handshake)
-	fmt.Println(p)
+	if temp.Handshake[0].Length < 70 {
+		return
+	}
+	con := payload[uint16(len(payload))-temp.Handshake[0].Length:]
+	ht, _ := strconv.ParseUint(fmt.Sprintf("%x", con[0:1]), 16, 32)
+	if ht == 1 {
+		fmt.Printf("src port [%s]", packet.TransportLayer().TransportFlow().Src().String())
+		decoder(con)
+	}
+}
+
+func decoder(con []byte) {
+	current := uint64(38)
+	sessionL := con[current : current+1]
+	sessionLength, _ := strconv.ParseUint(fmt.Sprintf("%x", sessionL), 16, 32)
+	current += sessionLength + 1
+	cipherL := con[current : current+2]
+	cipherLength, _ := strconv.ParseUint(fmt.Sprintf("%x", cipherL), 16, 32)
+	current = current + cipherLength + 6
+	notSNI := false
+	for current < uint64(len(con)) {
+		temp := con[current : current+2]
+		if fmt.Sprintf("0x%.2X", temp) == "0x0000" {
+			current += 7
+			length := con[current : current+2]
+			l, _ := strconv.ParseUint(fmt.Sprintf("%x", length), 16, 32)
+			current += 2
+			serverName := con[current : current+l]
+			log.Infof("server_name is %s\n", serverName)
+			return
+		} else {
+			if notSNI {
+				return
+			}
+			current += 4
+			notSNI = true
+			continue
+		}
+	}
 }
