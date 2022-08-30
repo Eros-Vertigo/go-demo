@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "demon/module/buffer"
+	_ "demon/module/goroutine"
 	log "github.com/sirupsen/logrus"
 )
 
