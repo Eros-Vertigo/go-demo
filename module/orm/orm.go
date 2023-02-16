@@ -2,6 +2,7 @@ package orm
 
 import (
 	"demon/module/orm/models/user"
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -19,7 +20,7 @@ func init() {
 		log.Error(err)
 		return
 	}
-	temp := user.Params{}
+	temp := user.Params{Name: "test"}
 	data, err := temp.Find(db)
-	log.Info(data)
+	fmt.Println(data)
 }

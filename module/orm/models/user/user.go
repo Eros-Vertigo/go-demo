@@ -2,7 +2,6 @@ package user
 
 import (
 	"database/sql"
-	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
 )
@@ -18,7 +17,8 @@ type User struct {
 	ActivatedAt  sql.NullTime
 }
 type Params struct {
-	Age uint8
+	Age  uint8
+	Name string
 }
 
 func (u *User) Save(db *gorm.DB) error {
@@ -26,15 +26,11 @@ func (u *User) Save(db *gorm.DB) error {
 	return res.Error
 }
 
-func (p *Params) Find(db *gorm.DB) (*User, error) {
+func (p *Params) Find(db *gorm.DB) (User, error) {
 	var (
-		u   = &User{}
+		u   User
 		err error
 	)
-	err = db.Find(u).Error
-	if err != nil {
-		log.Error(err)
-		return u, err
-	}
+	db.Where("name = ?", p.Name).First(&u)
 	return u, err
 }
