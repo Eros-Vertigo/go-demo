@@ -1,7 +1,8 @@
 package main
 
 import (
-	_ "demon/module/buffer"
+	_ "demon/components/mysql"
+	_ "demon/module/orm"
 	log "github.com/sirupsen/logrus"
 )
 
