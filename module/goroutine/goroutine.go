@@ -8,7 +8,7 @@ import (
 
 func init() {
 	log.Info("module goroutine")
-	setup()
+	//setup()
 }
 
 func portal1(channel chan string) {
