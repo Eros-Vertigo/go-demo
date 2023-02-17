@@ -14,27 +14,27 @@ import (
 6. 关闭 channel 会产生一个广播机制，所有向 channel 读取消息的 goroutine 都会收到消息
 7. channel 在 Golang 中是一等公民，他是线程安全的，面对并发问题，应首先想到 channel。
 */
-func init() {
+func init_pipeline() {
 	// 双向通道
-	//pipelined := make(chan int, 10)
-	//
-	//fmt.Printf("管道可缓冲 %d 个数据 \n", cap(pipelined))
-	//
-	//pipelined <- 1
-	//fmt.Printf("管道中当前有 %d 个数据 \n", len(pipelined))
-	//
-	//go func() {
-	//	fmt.Println("准备发送数据: 100")
-	//	pipelined <- 100
-	//}()
-	//
-	//go func() {
-	//	num := <-pipelined
-	//	fmt.Printf("接收到的数据是: %d \n", num)
-	//}()
-	//chanType()
-	//chanRange()
-	//chanLock()
+	pipelined := make(chan int, 10)
+
+	fmt.Printf("管道可缓冲 %d 个数据 \n", cap(pipelined))
+
+	pipelined <- 1
+	fmt.Printf("管道中当前有 %d 个数据 \n", len(pipelined))
+
+	go func() {
+		fmt.Println("准备发送数据: 100")
+		pipelined <- 100
+	}()
+
+	go func() {
+		num := <-pipelined
+		fmt.Printf("接收到的数据是: %d \n", num)
+	}()
+	chanType()
+	chanRange()
+	chanLock()
 }
 
 // Sender 定义只写信道类型

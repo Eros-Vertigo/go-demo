@@ -26,7 +26,7 @@ func generateInteger() int {
 	return <-resume
 }
 
-func init() {
+func init_inert() {
 	resume = integers()
 	fmt.Println(generateInteger())
 	fmt.Println(generateInteger())
