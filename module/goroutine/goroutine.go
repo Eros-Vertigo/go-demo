@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func init_goroutine() {
+func initGoroutine() {
 	log.Info("module goroutine")
 	setup()
 }

@@ -9,6 +9,6 @@ package goroutine
 2. 分发任务
 3. 传递数据所有权
 */
-func init_worker() {
+func initWorker() {
 
 }
