@@ -9,7 +9,7 @@ import (
 1. Timer 单次定时
 2. Ticker 周期定时
 */
-func init() {
+func initTime() {
 	// 1.timer 的简单使用
 	//timer1 := time.NewTimer(2 * time.Second)
 	//t1 := time.Now()
