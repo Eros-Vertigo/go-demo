@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func init() {
+func initRuntime() {
 	//sched()
 	//exit()
 	maxProc()
