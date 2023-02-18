@@ -3,11 +3,13 @@ package goroutine
 import (
 	"fmt"
 	"runtime"
+	"time"
 )
 
 func init() {
 	//sched()
-	exit()
+	//exit()
+	maxProc()
 }
 
 // runtime.Gosched() 让出CPU时间片，重新等待安排任务
@@ -38,4 +40,23 @@ func exit() {
 		}()
 		fmt.Println("A")
 	}()
+}
+
+func a() {
+	for i := 0; i < 10; i++ {
+		fmt.Println("A.", i)
+	}
+}
+
+func b() {
+	for i := 0; i < 10; i++ {
+		fmt.Println("B.", i)
+	}
+}
+
+func maxProc() {
+	runtime.GOMAXPROCS(2)
+	go a()
+	go b()
+	time.Sleep(time.Second)
 }
