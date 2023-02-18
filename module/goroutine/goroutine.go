@@ -6,9 +6,9 @@ import (
 	"time"
 )
 
-func init() {
+func init_goroutine() {
 	log.Info("module goroutine")
-	//setup()
+	setup()
 }
 
 func portal1(channel chan string) {
