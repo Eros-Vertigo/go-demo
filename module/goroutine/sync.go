@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-func init() {
+func initSync() {
 	demoSyncMap()
 }
 

@@ -9,13 +9,13 @@ import (
 
 const (
 	IniPath          = "common/config/app.ini"
-	DefaultHost      = "127.0.0.1"
+	DefaultHost      = "192.168.0.101"
 	DefaultUsername  = "root"
 	DefaultPassword  = "root"
 	DefaultDB        = "srun4k"
 	DefaultMysqlPort = 3306
-	DefaultRedisPort = 6379
-	DefaultRedisPwd  = ""
+	DefaultRedisPort = 16380
+	DefaultRedisPwd  = "srun_3000@redis"
 	DefaultMongoPort = 27017
 	DefaultMongoPwd  = ""
 	DefaultLogPath   = "runtime/"
