@@ -3,27 +3,32 @@ package socket
 import (
 	"bufio"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"net"
+	"os"
+	"strings"
 )
 
 func init() {
-	//fmt.Println("tcpClient")
-	//time.Sleep(5 * time.Second)
-	//setupClient()
-}
+	// 打开连接
+	conn, err := net.Dial("tcp", "localhost:50000")
+	if err != nil {
+		// 由于目标计算机积极拒绝而无法创建连接
+		fmt.Println("Error dialing", err.Error())
+		return // 终止程序
+	}
 
-func setupClient() {
-	fmt.Println("setupClient")
-	conn, err := net.Dial("tcp", ":8004")
-	if err != nil {
-		log.Error(err)
-		return
+	inputReader := bufio.NewReader(os.Stdin)
+	fmt.Println("First, what is your name")
+	clientName, _ := inputReader.ReadString('\n')
+	trimmedClient := strings.Trim(clientName, "\n")
+	// 给服务器发送信息知道程序退出
+	for {
+		fmt.Println("What to send to the server? Type Q to quit.")
+		input, _ := inputReader.ReadString('\n')
+		trimmedClient = strings.Trim(input, "\n")
+		if trimmedClient == "Q" {
+			return
+		}
+		_, err = conn.Write([]byte(trimmedClient + " says: " + trimmedClient))
 	}
-	fmt.Fprintf(conn, "GET /HTTP/1.0\r\n\r\n")
-	status, err := bufio.NewReader(conn).ReadString('\n')
-	if err != nil {
-		log.Error(err)
-	}
-	fmt.Println(status)
 }

@@ -1,55 +1,37 @@
 package socket
 
 import (
-	"bufio"
 	"fmt"
-	log "github.com/sirupsen/logrus"
-	"io"
 	"net"
-	"time"
 )
 
-func init() {
-	setupServer()
-}
-
-func setupServer() {
-	ln, err := net.Listen("tcp", ":8004")
+func initServerDemo() {
+	fmt.Println("Starting the server ...")
+	// 创建 listener
+	listener, err := net.Listen("tcp", "localhost:50000")
 	if err != nil {
-		log.Error(err)
+		fmt.Println("Error listening", err.Error())
+		return // 终止程序
 	}
+	// 监听并接收来自客户端的连接
 	for {
-		conn, err := ln.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
-			log.Error(err)
+			fmt.Println("Error accepting", err.Error())
+			return // 终止程序
 		}
-		go handleConnection(conn)
-		//go handleClient(conn)
+		go doServerStuff(conn)
 	}
 }
 
-func handleConnection(conn net.Conn) {
-	reader := bufio.NewReader(conn)
-	b := []byte(conn.LocalAddr().String() + "Say hello to Server...\n")
-	conn.Write(b)
+func doServerStuff(conn net.Conn) {
 	for {
-		msg, err := reader.ReadString('\n')
-		fmt.Println("ReadString")
-		fmt.Println(msg)
-
-		if err != nil || err == io.EOF {
-			fmt.Println(err)
-			break
-		}
-		time.Sleep(time.Second * 2)
-		fmt.Println("writing...")
-
-		b := []byte(conn.LocalAddr().String() + "write data to Server...\n")
-		_, err = conn.Write(b)
-
+		buf := make([]byte, 512)
+		n, err := conn.Read(buf)
 		if err != nil {
-			fmt.Println(err)
-			break
+			fmt.Println("Error reading", err.Error())
+			return // 终止程序
 		}
+		fmt.Printf("Received data: %v\n", string(buf[:n]))
 	}
 }
